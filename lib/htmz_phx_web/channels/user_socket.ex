@@ -23,8 +23,6 @@ defmodule HtmzPhxWeb.UserSocket do
   @impl true
   def connect(params, socket, _connect_info) do
     # Extract user_id from JWT token if present
-    dbg(params)
-    dbg(params["jwt_token"])
 
     user_id =
       case params["jwt_token"] do
@@ -34,7 +32,6 @@ defmodule HtmzPhxWeb.UserSocket do
         token ->
           case JWT.verify_jwt(token) do
             {:ok, user_id} ->
-              dbg(user_id)
               user_id
 
             {:error, _} ->

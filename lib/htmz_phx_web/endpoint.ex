@@ -14,7 +14,7 @@ defmodule HtmzPhxWeb.Endpoint do
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [
       connect_info: [session: @session_options],
-      check_origin: ["http://localhost:4000"]
+      check_origin: true
     ],
     longpoll: [connect_info: [session: @session_options]]
 
