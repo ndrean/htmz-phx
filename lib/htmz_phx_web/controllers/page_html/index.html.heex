@@ -1,0 +1,42 @@
+<div class="flex flex-col md:flex-row gap-8 p-4">
+  <!-- Left column: Grocery Items -->
+  <div class="md:w-1/2">
+    <h2 class="text-3xl font-bold text-gray-100 mb-6">Grocery Items</h2>
+    <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+      <%= for item <- @items do %>
+        <div
+          class="bg-white rounded-lg p-4 shadow-md flex justify-between items-center transition-transform transform hover:scale-[1.02] cursor-pointer"
+          hx-get={"/api/item-details/#{item.id}"}
+          hx-target="#item-details-card"
+          hx-swap="innerHTML"
+        >
+          <div>
+            <span class="text-lg font-semibold text-gray-900"><%= item.name %></span>
+            <span class="text-sm text-gray-500 ml-2">
+              $<%= :erlang.float_to_binary(item.price, decimals: 2) %>
+            </span>
+          </div>
+          <button
+            class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-full hover:bg-blue-600 transition-colors cursor-pointer"
+            hx-post={"/api/cart/add/#{item.id}"}
+            hx-swap="none"
+            onclick="event.stopPropagation()"
+          >
+            Add to Cart
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Right column: Item Details -->
+  <div
+    id="item-details-card"
+    class="md:w-1/2 bg-gray-100 rounded-xl p-6 shadow-lg min-h-[300px] flex items-center justify-center transition-all duration-300"
+  >
+    <div class="text-center text-gray-500">
+      <h3 class="text-xl font-semibold mb-4">Select an item</h3>
+      <p class="text-gray-400">Click on a grocery item to view its details here.</p>
+    </div>
+  </div>
+</div>

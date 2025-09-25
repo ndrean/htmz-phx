@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title default="HtmzPhx" suffix=" · Phoenix Framework">
+      {assigns[:page_title]}
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+    </script>
+    <%!-- <script src="https://unpkg.com/htmx.org@2.0.4"></script> --%>
+
+    <script>
+      window.userToken = "<%= assigns[:user_token] %>";
+    </script>
+    <script>
+      (() => {
+        const setTheme = (theme) => {
+          if (theme === "system") {
+            localStorage.removeItem("phx:theme");
+            document.documentElement.removeAttribute("data-theme");
+          } else {
+            localStorage.setItem("phx:theme", theme);
+            document.documentElement.setAttribute("data-theme", theme);
+          }
+        };
+        if (!document.documentElement.hasAttribute("data-theme")) {
+          setTheme(localStorage.getItem("phx:theme") || "system");
+        }
+        window.addEventListener("storage", (e) => e.key === "phx:theme" && setTheme(e.newValue || "system"));
+        
+        document.addEventListener("DOMContentLoaded", () => {
+          document
+            .querySelectorAll("button[data-phx-theme]")
+            .forEach((el) => {
+              el.addEventListener("click", () => {
+                setTheme(el.dataset.phxTheme)
+              })
+            })
+        })
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="main-content" class="container mx-auto p-4">
+      <header class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">HTMZ Phoenix Shopping</h1>
+        <nav class="flex space-x-4">
+          <a
+            href="/"
+            class="btn btn-ghost"
+            hx-get="/"
+            hx-target="#page-content"
+            hx-swap="innerHTML"
+            hx-push-url="true"
+          >
+            Home
+          </a>
+          <div class="flex items-center">
+            <a
+              href="/cart"
+              class="btn btn-ghost"
+              hx-get="/cart"
+              hx-target="#page-content"
+              hx-swap="innerHTML"
+              hx-push-url="true"
+            >
+              Shopping Cart
+            </a>
+            <span
+              id="cart-badge"
+              class="badge badge-primary ml-2"
+              hx-get="/cart-count"
+              hx-trigger="updateCartCount from:body"
+              hx-swap="innerHTML"
+            >
+              {assigns[:cart_count] || 0}
+            </span>
+          </div>
+          <span
+            id="presence-count"
+            class="badge badge-secondary"
+          >
+            Users: 1
+          </span>
+        </nav>
+      </header>
+
+      <main id="page-content">
+        {@inner_content}
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-semibold">Your Shopping Cart</h2>
+  <div
+    class="text-xl font-bold text-primary"
+    hx-get="/cart-total"
+    hx-trigger="load, cartUpdate from:body"
+  >
+    Total: $<%= :erlang.float_to_binary(@cart_total, decimals: 2) %>
+  </div>
+</div>
+
+<%= if @cart_items == [] do %>
+  <div class="text-center py-12">
+    <p class="text-gray-500 text-lg">Your cart is empty</p>
+    <a href="/"
+       class="btn btn-primary mt-4"
+       hx-get="/"
+       hx-target="#page-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">Start Shopping</a>
+  </div>
+<% else %>
+  <div class="space-y-4">
+    <%= for item <- @cart_items do %>
+      <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <h3 class="text-lg font-semibold"><%= item.name %></h3>
+              <span class="text-sm text-gray-500">
+                $<%= :erlang.float_to_binary(item.price, decimals: 2) %> each
+              </span>
+            </div>
+
+            <div id={"item-row-#{item.id}"} class="flex items-center space-x-4">
+              <div class="flex items-center space-x-2">
+                <button
+                  class="btn btn-sm btn-circle btn-outline"
+                  hx-post={"/api/cart/decrease-quantity/#{item.id}"}
+                  hx-target={"#item-row-#{item.id}"}
+                  hx-swap="outerHTML"
+                >
+                  -
+                </button>
+
+                <span
+                  id={"quantity-#{item.id}"}
+                  class="w-8 text-center font-semibold"
+                >
+                  <%= item.quantity %>
+                </span>
+
+                <button
+                  class="btn btn-sm btn-circle btn-outline"
+                  hx-post={"/api/cart/increase-quantity/#{item.id}"}
+                  hx-target={"#item-row-#{item.id}"}
+                  hx-swap="outerHTML"
+                >
+                  +
+                </button>
+              </div>
+
+              <span class="font-bold text-primary min-w-[4rem]">
+                $<%= :erlang.float_to_binary(item.price * item.quantity, decimals: 2) %>
+              </span>
+
+              <button
+                class="btn btn-sm btn-error btn-outline"
+                hx-delete={"/api/cart/remove/#{item.id}"}
+                hx-swap="none"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-8 text-center">
+    <button class="btn btn-success btn-lg">Checkout</button>
+  </div>
+<% end %>
