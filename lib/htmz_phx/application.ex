@@ -7,6 +7,8 @@ defmodule HtmzPhx.Application do
 
   @impl true
   def start(_type, _args) do
+    HtmzPhx.Release.migrate()
+
     children = [
       HtmzPhxWeb.Telemetry,
       HtmzPhx.Repo,
