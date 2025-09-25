@@ -1,20 +1,57 @@
 # HtmzPhx
 
-To start your Phoenix server:
+- SQLite rendering the SVGs
+- ETS for shopping cart
+- Presence to clean shopping cart on disconnection
+  
+## Local Grafana k6 stress test
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+23k req/s with 6.000 Virtual Users sending 10req/s (db lookup, ETS lookup, send response)
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```txt
+=== PHOENIX LOAD TEST: PLATEAU PERFORMANCE ===
+📊 PLATEAU 1 (2K VUs - 30s):
+  Requests: 386494
+  Req/s: 12883
+  Avg Response Time: 3.57ms
+  95th Percentile: 16.38ms
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+📊 PLATEAU 2 (6K VUs - 30s):
+  Requests: 706950
+  Req/s: 23565
+  Avg Response Time: 66.53ms
+  95th Percentile: 200.65ms
 
-## Learn more
+=== PHOENIX OVERALL RESULTS ===
+Peak VUs: 6000
+Total Requests: 1538330
+Failed Requests: 0.00%
+```
+
+## Deploy on VPS
+
+<https://phx.htmz.online>
 
 ```sh
-docker run -p 4000:4000 \
-    -e SECRET_KEY_BASE=d72FrFMTI5mkBap9laia/84J17SbQwe43O2UCPRWlZZ7UrztllT4C2705V8K8696 \
-    -e JWT_SECRET=d72FrFMTI5mkBap9laia/84J17SbQwe43O2UCPRWlZZ7UrztllT4C2705V8K8696 \
-    -e PHX_SERVER=true \
-    htmz-phx
+git push
 ```
+
+On VPS:
+
+```sh
+apt install git, docker
+
+git pull
+docker build htmz-phx:local .
+docker run \
+    --name htmz-phx \
+    --restart unless-stopped \
+    -p 2082:2082 \
+    -e PORT=2082 \
+    -e SECRET_KEY_BASE=d72FrFMTI5mkBap9laia84J17Sb... \
+    -e JWT_SECRET=ziggit \
+    -e PHX_SERVER=true \
+    htmz-phx:local
+```
+
+

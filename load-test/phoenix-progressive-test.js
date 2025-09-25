@@ -10,10 +10,10 @@ export const options = {
       executor: "ramping-vus",
       startVUs: 0,
       stages: [
-        { duration: "10s", target: 5_000 }, // Ramp to 5K users
-        { duration: "30s", target: 5_000 }, // Hold at 5K users (Plateau 1)
-        { duration: "10s", target: 10_000 }, // Ramp to 10K users
-        { duration: "30s", target: 10_000 }, // Hold at 10K users (Plateau 2)
+        { duration: "10s", target: 2_000 }, // Ramp to 2K users
+        { duration: "30s", target: 2_000 }, // Hold at 2K users (Plateau 1)
+        { duration: "10s", target: 6_000 }, // Ramp to 4K users
+        { duration: "30s", target: 6_000 }, // Hold at 4K users (Plateau 2)
         { duration: "10s", target: 0 }, // Ramp down
       ],
     },
@@ -146,7 +146,7 @@ export function handleSummary(data) {
 
   console.log(`
 === PHOENIX LOAD TEST: PLATEAU PERFORMANCE ===
-📊 PLATEAU 1 (5K VUs - 30s):
+📊 PLATEAU 1 (2K VUs - 30s):
   Requests: ${plateau5kReqs.toLocaleString()}
   Req/s: ${reqs5kPerSec.toFixed(0)}
   Avg Response Time: ${
@@ -156,7 +156,7 @@ export function handleSummary(data) {
     metrics.http_req_duration_5k?.values?.["p(95)"]?.toFixed(2) || "N/A"
   }ms
 
-📊 PLATEAU 2 (8K VUs - 30s):
+📊 PLATEAU 2 (6K VUs - 30s):
   Requests: ${plateau8kReqs.toLocaleString()}
   Req/s: ${reqs8kPerSec.toFixed(0)}
   Avg Response Time: ${
