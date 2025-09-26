@@ -12,8 +12,8 @@ export const options = {
       stages: [
         { duration: "10s", target: 2_000 }, // Ramp to 2K users
         { duration: "30s", target: 2_000 }, // Hold at 2K users (Plateau 1)
-        { duration: "10s", target: 6_000 }, // Ramp to 4K users
-        { duration: "30s", target: 6_000 }, // Hold at 4K users (Plateau 2)
+        { duration: "10s", target: 4_000 }, // Ramp to 4K users
+        { duration: "30s", target: 4_000 }, // Hold at 4K users (Plateau 2)
         { duration: "10s", target: 0 }, // Ramp down
       ],
     },
@@ -24,7 +24,8 @@ export const options = {
 };
 
 // Phoenix runs on port 4000 by default
-const BASE_URL = __ENV.BASE_URL || "http://localhost:4000";
+// const BASE_URL = __ENV.BASE_URL || "http://localhost:4000";
+const BASE_URL = "http://91.98.129.192:2082";
 const itemIds = [1, 2, 3, 4, 5, 6, 7];
 
 // Custom metrics per plateau
@@ -56,7 +57,7 @@ export default function () {
   }
 
   // Realistic user think time
-  sleep(0.1);
+  sleep(0.3);
 
   // Determine current stage using k6 execution context elapsed time
   const elapsedMs = Date.now() - exec.scenario.startTime;
@@ -109,7 +110,7 @@ export default function () {
     "add to cart status 200": (r) => r.status === 200,
   });
 
-  sleep(0.1);
+  sleep(0.15);
 
   // 2. Remove from cart
   response = http.del(`${BASE_URL}/api/cart/remove/${randomItemId}`, null, {
@@ -130,7 +131,7 @@ export default function () {
     "remove from cart status 200": (r) => r.status === 200,
   });
 
-  sleep(0.1);
+  sleep(0.15);
 }
 
 export function handleSummary(data) {

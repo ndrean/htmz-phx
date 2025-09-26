@@ -64,7 +64,7 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
-    check_origin: ["//#{host}", "//localhost", "//91.98.129.192", "phx.htmz.online"],
+    check_origin: ["//#{host}", "//localhost", "http://91.98.129.192", "https://phx.htmz.online"],
     secret_key_base: secret_key_base
 
   # ## SSL Support
