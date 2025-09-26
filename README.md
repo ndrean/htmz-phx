@@ -8,6 +8,10 @@
 
 23k req/s with 6.000 Virtual Users sending 10req/s (db lookup, ETS lookup, send response)
 
+```sh
+k6 run load-test/phoenix-progressive-test.js
+```
+
 ```txt
 === PHOENIX LOAD TEST: PLATEAU PERFORMANCE ===
 📊 PLATEAU 1 (2K VUs - 30s):
@@ -36,14 +40,14 @@ Failed Requests: 0.00%
 git push
 ```
 
-On VPS:
+On VPS, with a non-root user ("nobody"):
 
 ```sh
 apt install git, docker
 
 git pull
 docker build htmz-phx:local .
-docker run \
+docker run -d \
     --name htmz-phx \
     --restart unless-stopped \
     -p 2082:2082 \
@@ -54,4 +58,21 @@ docker run \
     htmz-phx:local
 ```
 
+```sh
+docker logs htmz-phx
+```
 
+Docker uses its own iptables. To use the VPS firewall rules:
+
+```sh
+// nano /etc/docker/daemon.json
+{
+  "iptables": false
+}
+```
+
+```sh
+sudo ufw reload
+sudo ufw allow 2082/tcp
+sudo docker restart htmz_phx
+```

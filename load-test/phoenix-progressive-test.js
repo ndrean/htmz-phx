@@ -10,9 +10,9 @@ export const options = {
       executor: "ramping-vus",
       startVUs: 0,
       stages: [
-        { duration: "10s", target: 2_000 }, // Ramp to 2K users
+        { duration: "20s", target: 2_000 }, // Ramp to 2K users
         { duration: "30s", target: 2_000 }, // Hold at 2K users (Plateau 1)
-        { duration: "10s", target: 4_000 }, // Ramp to 4K users
+        { duration: "20s", target: 4_000 }, // Ramp to 4K users
         { duration: "30s", target: 4_000 }, // Hold at 4K users (Plateau 2)
         { duration: "10s", target: 0 }, // Ramp down
       ],
@@ -65,9 +65,9 @@ export default function () {
 
   let currentStage = "none";
   // 10-40s: 5K plateau (10s ramp + 30s hold)
-  if (elapsedSeconds >= 10 && elapsedSeconds <= 40) currentStage = "plateau5k";
+  if (elapsedSeconds >= 20 && elapsedSeconds <= 50) currentStage = "plateau5k";
   // 50-80s: 8K plateau (after 30s ramp, 30s hold)
-  if (elapsedSeconds >= 50 && elapsedSeconds <= 80) currentStage = "plateau8k";
+  if (elapsedSeconds >= 70 && elapsedSeconds <= 100) currentStage = "plateau8k";
 
   const randomItemId = itemIds[Math.floor(Math.random() * itemIds.length)];
 
@@ -110,7 +110,7 @@ export default function () {
     "add to cart status 200": (r) => r.status === 200,
   });
 
-  sleep(0.15);
+  sleep(0.2);
 
   // 2. Remove from cart
   response = http.del(`${BASE_URL}/api/cart/remove/${randomItemId}`, null, {
@@ -131,7 +131,7 @@ export default function () {
     "remove from cart status 200": (r) => r.status === 200,
   });
 
-  sleep(0.15);
+  sleep(0.2);
 }
 
 export function handleSummary(data) {
