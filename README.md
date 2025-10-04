@@ -1,5 +1,9 @@
 # HtmzPhx
 
+[![Elixir](https://img.shields.io/badge/Elixir-%234B275F.svg?&logo=elixir&logoColor=white)](#)
+[![SQLite](https://img.shields.io/badge/SQLite-%2307405e.svg?logo=sqlite&logoColor=white)](#)
+[![HTMX](https://img.shields.io/badge/HTMX-36C?logo=htmx&logoColor=fff)](#)
+
 - SQLite rendering the SVGs
 - ETS for shopping cart
 - Presence to clean shopping cart on disconnection
